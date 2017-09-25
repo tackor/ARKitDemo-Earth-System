@@ -14,6 +14,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    //地球
+    var earthNode: SCNNode!
+    
+    //月球
+    var moonNode: SCNNode!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,7 +30,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene(named: "art.scnassets/earth.scn")!
+        
+        print("个数%d", scene.rootNode.childNodes.count)
+        
+        let earthSystemNode = scene.rootNode.childNodes[0]
+        
+        earthNode = earthSystemNode.childNodes[0]
+        let moonRootNode = earthSystemNode.childNodes[1]
+        
+        //地球自转
+        earthNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: -1, z: 0, duration: 20)))
+        
+        //月球公转
+        moonRootNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: -1, z: 0, duration: 15)))
+        
+        //月球自转
+        moonNode = moonRootNode.childNodes[0]
+        moonNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: -1, z: 0, duration: 10)))
+        
+        //月球公转
+//        moonNode.runAction((SCNAction.repeatForever(SCNAction.rotate)))
         
         // Set the scene to the view
         sceneView.scene = scene
